@@ -2,10 +2,11 @@
   yaramp.models.mpd
   (:import [org.bff.javampd.MPD]))
 
-(def default-connection '("192.168.144.3" 6600))
+(def default-host "192.168.144.3")
+(def default-port 6600)
 
 (defn create-mpd
-  ([] (apply create-mpd default-connection))
+  ([] (create-mpd default-host default-port))
   ([host port] (org.bff.javampd.MPD. host port)))
 
 (defn get-player [mpd]
@@ -26,12 +27,17 @@
         album (-> (.getAlbum song) .toString)
         length (.getLength song)
         title (.getTitle song)
+        position (.getPosition song)
         ]
-    {:artist artist :album album :length length :title title}))
+    {:artist artist :album album :length length :title title
+     :position position}))
+
+(defn get-current-song [player]
+  (if-let [song (.getCurrentSong player)]
+    (build-song song)))
 
 (defn get-playlist [mpd]
   (let [list (.getSongList (.getMPDPlaylist mpd))]
-    (println list)
     (map build-song list)))
 
 (defn with-player
@@ -41,6 +47,10 @@
                   get-player
                   f)))
 
-(defmacro with-player' [bind & body]
-  `(let [~bind (get-player (create-mpd "192.168.144.3" 6600))]
-     ~@body))
+(defmacro with-mpd [host port bind & body]
+  `(try
+     (let [~bind (create-mpd ~host ~port)
+           res# ~@body]
+         (.close ~bind)
+       res#)
+     (catch Exception e# (println "uaaa" e#))))
