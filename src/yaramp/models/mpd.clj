@@ -22,13 +22,13 @@
     (.setVolume player volume)
     volume))
 
-(def play [player]
+(defn play [player]
   (.play player))
 
-(def pause [player]
+(defn pause [player]
   (.pause [player]))
 
-(def stop [player]
+(defn stop [player]
   (.stop [player]))
 
 (defn build-song [song]
