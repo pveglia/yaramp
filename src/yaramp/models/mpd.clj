@@ -22,6 +22,15 @@
     (.setVolume player volume)
     volume))
 
+(def play [player]
+  (.play player))
+
+(def pause [player]
+  (.pause [player]))
+
+(def stop [player]
+  (.stop [player]))
+
 (defn build-song [song]
   (let [artist (-> (.getArtist song) .toString)
         album (-> (.getAlbum song) .toString)

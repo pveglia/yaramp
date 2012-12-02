@@ -7,11 +7,15 @@
 (defn generate-playlist []
   (mpd/with-mpd mpd/default-host mpd/default-port mpd
     (let [player (mpd/get-player mpd)
+          status (.toString (.getStatus player))
           songs (mpd/get-playlist mpd)
           current (mpd/get-current-song player)
           ]
       (map #(list [:tr
-                   [:td (when (and current (= current %)) "X")]
+                   [:td (when (and current (= current %))
+                          (if (= "STATUS_PLAYING" status)
+                            [:img {:src "/img/play.png"}]
+                            [:img {:src "/img/stop.png"}]))]
                    [:td (:position %)]
                    [:td (:title %)]
                    [:td (:artist %)]

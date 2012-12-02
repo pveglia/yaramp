@@ -6,9 +6,16 @@
             (html5
               [:head
                [:title "yaramp"]
-               [:link {:href "/css/bootstrap.min.css" :rel "stylesheet"
-                       :media "screen"}]]
+               #_[:link {:href "/css/bootstrap.min.css" :rel "stylesheet"
+                         :media "screen"}]
+               [:link {:href "//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css"
+                       :rel "stylesheet"}]
+               ; <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+               ]
               [:body
                content
                [:script {:src "http://code.jquery.com/jquery-latest.js"}]
-               [:script {:src "/js/bootstrap.min.js"}]]))
+               #_[:script {:src "/js/bootstrap.min.js"}]
+               [:script {:src "//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"}]
+               ; <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+               ]))
