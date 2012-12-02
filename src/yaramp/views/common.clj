@@ -6,7 +6,9 @@
             (html5
               [:head
                [:title "yaramp"]
-               (include-css "/css/reset.css")]
+               [:link {:href "/css/bootstrap.min.css" :rel "stylesheet"
+                       :media "screen"}]]
               [:body
-               [:div#wrapper
-                content]]))
+               content
+               [:script {:src "http://code.jquery.com/jquery-latest.js"}]
+               [:script {:src "/js/bootstrap.min.js"}]]))
