@@ -23,13 +23,15 @@
     volume))
 
 (defn play [player]
+  (println "called play")
   (.play player))
 
 (defn pause [player]
-  (.pause [player]))
+  (println "called pause")
+  (.pause player))
 
 (defn stop [player]
-  (.stop [player]))
+  (.stop player))
 
 (defn build-song [song]
   (let [artist (-> (.getArtist song) .toString)
@@ -62,4 +64,4 @@
            res# ~@body]
          (.close ~bind)
        res#)
-     (catch Exception e# (println "uaaa" e#))))
+     (catch Exception e# (println "Exception caught by me" e#))))

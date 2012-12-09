@@ -1,6 +1,7 @@
 (ns yaramp.views.playlist
   (:require [yaramp.views.common :as common]
-            [yaramp.models.mpd :as mpd])
+            [yaramp.models.mpd :as mpd]
+            [noir.response :as resp])
   (:use [noir.core :only [defpage]]
         [hiccup.core :only [html]]))
 
@@ -51,6 +52,34 @@
         [:th] [:th "Position"] [:th "Title"] [:th "Artist"] [:th "Album"]
         [:th "Length"]]
        (generate-playlist)]]]]))
+
+(defpage [:post "/stop"] []
+  (mpd/with-mpd mpd/default-host mpd/default-port mpd
+    (let [player (mpd/get-player mpd)]
+      (mpd/stop player)
+      (resp/empty))))
+
+(defpage [:post "/play"] []
+  (mpd/with-mpd mpd/default-host mpd/default-port mpd
+    (let [player (mpd/get-player mpd)]
+      (mpd/play player)
+      (resp/empty))))
+
+(defpage [:post "/pause"] []
+  (mpd/with-mpd mpd/default-host mpd/default-port mpd
+    (let [player (mpd/get-player mpd)]
+      (mpd/pause player)
+      (resp/empty))))
+
+(defpage [:post "/volup"] []
+  (mpd/with-mpd mpd/default-host mpd/default-port mpd
+    (let [player (mpd/get-player mpd)]
+      (resp/json {:volume (mpd/volup player)}))))
+
+(defpage [:post "/voldown"] []
+  (mpd/with-mpd mpd/default-host mpd/default-port mpd
+    (let [player (mpd/get-player mpd)]
+      (resp/json {:volume (mpd/voldown player)}))))
 
 (defpage "/" []
   (common/layout

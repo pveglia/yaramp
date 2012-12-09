@@ -18,7 +18,7 @@ TBD
 
 ## Dependencies
 
-* [javampd][http://www.thejavashop.net/javampd/]
+* [javampd](http://www.thejavashop.net/javampd/)
 
 ## Usage
 

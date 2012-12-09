@@ -1,0 +1,5 @@
+#msg_ok, #msg_ko {
+  position: fixed;
+  right: 0px;
+  display: none;
+}
