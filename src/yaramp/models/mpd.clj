@@ -1,8 +1,10 @@
 (ns ^{:author "Paolo Veglia"}
   yaramp.models.mpd
-  (:import [org.bff.javampd.MPD]))
+  (:import [org.bff.javampd.MPD])
+  (:require clojure.string))
 
 (def default-host "192.168.144.3")
+;(def default-host "127.0.0.1")
 (def default-port 6600)
 
 (defn create-mpd
@@ -65,3 +67,35 @@
          (.close ~bind)
        res#)
      (catch Exception e# (println "Exception caught by me" e#))))
+
+(defn listArtists [fltr]
+  (with-mpd default-host default-port mpd
+    (let [db (.getMPDDatabase mpd)
+          all (.listAllArtists db)
+          filtered (filter #(re-find (re-pattern (str "(?i)" fltr)) (.toString %))
+                           all)]
+      (println filtered))))
+
+(defn listAlbumsByArtist [artist]
+  (with-mpd default-host default-port mpd
+    (let [db (.getMPDDatabase mpd)
+          artistObj (org.bff.javampd.objects.MPDArtist. artist)]
+      (map #(hash-map :name (.getName %) :artist (.getArtist %))
+           (.listAlbumsByArtist db artistObj)))))
+
+(defn songsInAlbum [album]
+  (with-mpd default-host default-port mpd
+    (let [db (.getMPDDatabase mpd)
+          albumObj (org.bff.javampd.objects.MPDAlbum. album)]
+      (map build-song (.searchAlbum db albumObj)))))
+
+(defn addAlbum
+  ([albumname] (addAlbum albumname false))
+  ([albumname clear]
+     (with-mpd default-host default-port mpd
+       (let [db (.getMPDDatabase mpd)
+             pl (.getMPDPlaylist mpd)
+             alb (org.bff.javampd.objects.MPDAlbum. albumname)]
+         (when clear
+           (clearPlaylist. pl))
+         (insertAlbum. pl alb)))))
